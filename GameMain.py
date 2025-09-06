@@ -17,10 +17,10 @@ cap.set(4, 720) # 4 is height
 # Build hand detector
 detector = HandDetector(detectionCon=0.8, maxHands=1)  # standard 0.5 but to be more precise
 
-def pixelText(img, text, pos, font_size=48, color=(255, 255, 255)):
+def pixelText(img, text, pos, font_size, color):
     imgPil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     draw = ImageDraw.Draw(imgPil)
-    font = ImageFont.truetype("PressStart2P.ttf", font_size) # load font
+    font = ImageFont.truetype("PressStart2P-Regular.ttf", font_size) # load font
     draw.text(pos, text, font=font, fill=color)
     return cv2.cvtColor(np.array(imgPil), cv2.COLOR_RGB2BGR)
 
@@ -70,9 +70,10 @@ class SnakeGameClass:
             cv2.rectangle(overlay, (0, 0), (imgMain.shape[1], imgMain.shape[0]), (0, 0, 0), -1)
             alpha = 0.6  # transparency
             imgMain = cv2.addWeighted(overlay, 0.7, imgMain, 0.3, 0)
-            cv2.putText(imgMain, "YOU DIED", (300, 300), font_size=64, color=(255,0,0))
-            cv2.putText(imgMain, f"Score: {self.score}", (250, 400), font_size=48, color=(255,255,255))
-            cv2.putText(imgMain, "Press R to Restart the Game", (150, 550), font_size=32, color=(255,255,0))
+
+            imgMain = pixelText(imgMain, "YOU DIED", (300, 300), font_size=64, color=(255,0,0))
+            imgMain = pixelText(imgMain, f"Score: {self.score}", (300, 400), font_size=48, color=(255,255,255))
+            imgMain = pixelText(imgMain, "Press R to Restart the Game", (300, 550), font_size=25, color=(255,255,0))
             return imgMain
         else:
             cx, cy = currentHead
