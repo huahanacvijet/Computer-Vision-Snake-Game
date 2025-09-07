@@ -1,7 +1,8 @@
-### Computer Vision Snake Game
-   
-Built using: cvzone, NumPy, OpenCV, Pillow.   
-   
+### Computer Vision Snake Game  
+
+A computer vision twist on the classic Snake game, built using: cvzone, NumPy, OpenCV, and Pillow.   
+Eat as many pizza slices as you can!  
+<br>
 **Current Features:**  
 - 🐍 Move the snake around the screen using your index/pointer finger.  
 - 🍕 Eat the pizza slices for points!
@@ -12,6 +13,7 @@ Built using: cvzone, NumPy, OpenCV, Pillow.
 - 🌈 Graphics changes and improvements.
     
 <br>   
+   
 ---  
 
 ### Credits:   
