@@ -26,5 +26,5 @@ SOFTWARE.
    
 This software is based on and adapted/restructured from:     
 - **"Snake Game using OpenCV Python"** by Murtaza Hassan    
-  YouTube: [https://youtu.be/w26Ze6lP02Y?si=1FdhFzz9MzshiC7Z](https://youtu.be/w26Ze6lP02Y?si=aH4bX4TY8hg3UCXR)    
+  YouTube: https://youtu.be/w26Ze6lP02Y?si=1FdhFzz9MzshiC7Z  
   Copyright (c) 2021 Vizdx LLC, Computer Vision Zone, https://www.computervision.zone/
