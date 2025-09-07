@@ -7,7 +7,12 @@ import math # for Euclidean distances
 import random
 from collections import deque
 
-""" Snake game built using OpenCV and cvzone """
+""" Computer Vision Snake Game """
+# For those learning:
+# Began from the tutorial: https://youtu.be/w26Ze6lP02Y?si=PUKYpcJLg4JMS1PZ
+# But I developed and restructured some parts to be structured in a way that clicks for me more
+# If you have any questions, feel free to contact me. I left a lot of comments to help.
+# This is the best place to learn from imo: https://github.com/cvzone/cvzone
 
 # Camera Initialisation
 cap = cv2.VideoCapture(0) # opens default camera (index 0)
@@ -66,14 +71,14 @@ class SnakeGameClass:
     def update(self, imgMain, currentHead):
         # update game for new frame
         if self.gameOver:  # if game-over, then diff screen but this is temporary
-            overlay = imgMain.copy() # darken screen
+            overlay = imgMain.copy() # this for darkening the screen
             cv2.rectangle(overlay, (0, 0), (imgMain.shape[1], imgMain.shape[0]), (0, 0, 0), -1)
             alpha = 0.6  # transparency
             imgMain = cv2.addWeighted(overlay, 0.7, imgMain, 0.3, 0)
 
             imgMain = pixelText(imgMain, "YOU DIED", (300, 300), font_size=64, color=(255,0,0))
             imgMain = pixelText(imgMain, f"Score: {self.score}", (300, 400), font_size=48, color=(255,255,255))
-            imgMain = pixelText(imgMain, "Press R to Restart the Game", (300, 550), font_size=25, color=(255,255,0))
+            imgMain = pixelText(imgMain, "Press R to Restart the Game", (300, 550), font_size=25, color=(0,255,0))
             return imgMain
         else:
             cx, cy = currentHead
@@ -113,12 +118,13 @@ class SnakeGameClass:
             )
             # background img, front img, location (pushed to centre)
 
-            # Present Score
-            cvzone.putTextRect(imgMain, f'Score: {self.score}', [50, 80], scale=3, thickness=3, offset=10)
+            # Live Score
+            cv2.rectangle(imgMain, (20, 20), (255, 70), (255, 16, 240), -1)
+            imgMain = pixelText(imgMain, f'Score:{self.score}', [30, 35], font_size= 25, color=(255,255,255))
 
             # Check for self-eat : create polygon from points other than last point and break if too low distance
             if len(self.points) > 4:
-                points = np.array(list(self.points)[:-2], np.int32)  # have to convert to numpy array then use polygon feature
+                points = np.array(list(self.points)[:-2], np.int32)  # convert to numpy array then use polygon feature
                 points = points.reshape((-1, 1, 2))
                 cv2.polylines(imgMain, [points], False, (0, 0, 0), 3)
                 # red line is polygon line, if hit then game over
@@ -130,7 +136,7 @@ class SnakeGameClass:
         return imgMain
 
 
-# game object - send pizza pic
+# game object - pass pizza pic
 game = SnakeGameClass("pizza.png")  # location of image
 
 
@@ -138,18 +144,19 @@ while True:
     # cap.read gets frame, success will be false if camera fails
     success, img = cap.read()
     img = cv2.flip(img, 1)  # horizontal flip (0 would be vertical)
-    hands, img = detector.findHands(img, flipType=False)
+    hands, img = detector.findHands(img, flipType=False) # if theres a hand, it's a list of info
 
-    if hands:  # if there is a hand
-        lmList = hands[0]['lmList']  # dictionary lmList = the hand
-        pointIndex = lmList[8][0:2]  # find pointer finger - 8 is index fingertip
+    if hands:
+        # The github link gives a great break down on this (hand tracking section)
+        handPoints = hands[0]['lmList'] # gets first hand seen and all the points
+        pointIndex = handPoints[8][0:2]  # find pointer finger - 8 is index fingertip
         img = game.update(img, pointIndex)
     cv2.imshow("Image", img)
     key = cv2.waitKey(1)
     if key == ord('r'):
         game.reset()
 
-    if key == ord('q') or key == 27:  # 27 = esc
+    if key == ord('q') or key == 27:  # 27 = esc btw
         break
 
 cap.release()
